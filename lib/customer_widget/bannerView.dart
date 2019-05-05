@@ -105,7 +105,7 @@ class _BannerViewState extends BaseState<BannerView> {
           onPageChanged: (int index) {
             currentIndex = getCurrentIndex(index);
             print("currentIndex is $currentIndex");
-            title = this.widget.datas?.data[currentIndex].title ?? "";
+            title = this.widget.datas?.data?.elementAt(currentIndex)?.title ?? "空的";
             print('after currentIndex is ${currentIndex}');
             setState(() {});
             if (index == maxLength - 2 || index == 1) {
