@@ -78,6 +78,7 @@ class _IndexWidgetState extends BaseState<IndexWidget> {
   _getBanner() async {
     Response<Map<String, dynamic>> data = await dio.get(bannerUrl);
     if (null != data) {
+      print("banner data is $data");
       setState(() {
         bannerData = BannerListModel.fromJson(data.data);
       });

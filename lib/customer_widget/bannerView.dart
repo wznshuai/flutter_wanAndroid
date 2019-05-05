@@ -21,11 +21,12 @@ class _BannerViewState extends BaseState<BannerView> {
   int realLength;
   static int maxLength = 10000;
   static int startIndex = maxLength ~/ 2;
-  int currentIndex;
+  int currentIndex = 0;
+  String title = "";
   PageController controller = PageController(initialPage: startIndex);
 
   void startTimer() {
-    print('startTimer');
+    print("start timer");
     cancelTimer();
     if (null == timer || !timer.isActive) {
       timer = Timer.periodic(Duration(seconds: 2), (Timer timer) {
@@ -37,6 +38,7 @@ class _BannerViewState extends BaseState<BannerView> {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("didChangeAppLifecycleState state is ${state}");
     switch (state) {
       case AppLifecycleState.paused:
         cancelTimer();
@@ -44,25 +46,27 @@ class _BannerViewState extends BaseState<BannerView> {
       case AppLifecycleState.resumed:
         startTimer();
         break;
-      default: {}
+      default:
+        {}
     }
   }
 
   void cancelTimer() {
     if (null != timer) {
       timer.cancel();
-      print('cancelTimer');
+      print("cancel timer");
     }
   }
 
   @override
   void didUpdateWidget(BannerView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    startTimer();
   }
 
   int getCurrentIndex(int index) {
-    return realLength == 0 ? 0 : ((index - startIndex + realLength) % realLength).abs();
+    return realLength == 0
+        ? 0
+        : ((index - startIndex + realLength) % realLength).abs();
   }
 
   @override
@@ -83,13 +87,13 @@ class _BannerViewState extends BaseState<BannerView> {
     List<Widget> getWidgets() {
       List<Widget> widgets = [];
       widgets.add(Listener(
-        onPointerDown: (PointerDownEvent down){
+        onPointerDown: (PointerDownEvent down) {
           cancelTimer();
         },
-        onPointerCancel: (PointerCancelEvent cancel){
+        onPointerCancel: (PointerCancelEvent cancel) {
           startTimer();
         },
-        onPointerUp: (PointerUpEvent up){
+        onPointerUp: (PointerUpEvent up) {
           startTimer();
         },
         child: PageView.builder(
@@ -100,6 +104,9 @@ class _BannerViewState extends BaseState<BannerView> {
           itemCount: widget.datas == null ? 0 : maxLength,
           onPageChanged: (int index) {
             currentIndex = getCurrentIndex(index);
+            print("currentIndex is $currentIndex");
+            title = this.widget.datas?.data[currentIndex].title ?? "";
+            print('after currentIndex is ${currentIndex}');
             setState(() {});
             if (index == maxLength - 2 || index == 1) {
               controller.jumpToPage(startIndex + getCurrentIndex(index));
@@ -111,11 +118,19 @@ class _BannerViewState extends BaseState<BannerView> {
         widgets.add(Positioned(
           child: CustomPaint(
             painter: Dot(realLength, currentIndex ?? startIndex),
-//                child: Text('asdadajsdn'),
             size: Size(100, 10),
           ),
           bottom: 5,
           right: 10,
+        ));
+        widgets.add(Positioned(
+          child: Container(
+            color: Color.fromARGB(0xc0, 0xa, 0xa, 0xa),
+            child: Text(title, style: TextStyle(color: Colors.white),),
+            width: MediaQueryData.fromWindow(ui.window).size.width,
+          ),
+          bottom: 0,
+          left: 0,
         ));
       }
       return widgets;
