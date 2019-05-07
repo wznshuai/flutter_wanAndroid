@@ -36,6 +36,7 @@ class _BannerViewState extends BaseState<BannerView> {
     }
   }
 
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("didChangeAppLifecycleState state is ${state}");
@@ -61,6 +62,7 @@ class _BannerViewState extends BaseState<BannerView> {
   @override
   void didUpdateWidget(BannerView oldWidget) {
     super.didUpdateWidget(oldWidget);
+    startTimer();
   }
 
   int getCurrentIndex(int index) {
@@ -104,9 +106,7 @@ class _BannerViewState extends BaseState<BannerView> {
           itemCount: widget.datas == null ? 0 : maxLength,
           onPageChanged: (int index) {
             currentIndex = getCurrentIndex(index);
-            print("currentIndex is $currentIndex");
-            title = this.widget.datas?.data?.elementAt(currentIndex)?.title ?? "空的";
-            print('after currentIndex is ${currentIndex}');
+            title = this.widget.datas?.data?.elementAt(currentIndex)?.title ?? "";
             setState(() {});
             if (index == maxLength - 2 || index == 1) {
               controller.jumpToPage(startIndex + getCurrentIndex(index));
@@ -116,14 +116,6 @@ class _BannerViewState extends BaseState<BannerView> {
       ));
       if (realLength > 0) {
         widgets.add(Positioned(
-          child: CustomPaint(
-            painter: Dot(realLength, currentIndex ?? startIndex),
-            size: Size(100, 10),
-          ),
-          bottom: 5,
-          right: 10,
-        ));
-        widgets.add(Positioned(
           child: Container(
             color: Color.fromARGB(0xc0, 0xa, 0xa, 0xa),
             child: Text(title, style: TextStyle(color: Colors.white),),
@@ -131,6 +123,14 @@ class _BannerViewState extends BaseState<BannerView> {
           ),
           bottom: 0,
           left: 0,
+        ));
+        widgets.add(Positioned(
+          child: CustomPaint(
+            painter: Dot(realLength, currentIndex ?? startIndex),
+            size: Size(100, 10),
+          ),
+          bottom: 5,
+          right: 10,
         ));
       }
       return widgets;

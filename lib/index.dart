@@ -14,7 +14,7 @@ class IndexWidget extends StatefulWidget {
 }
 
 class _IndexWidgetState extends BaseState<IndexWidget> {
-  int page = 1;
+  int page = 0;
   var dio = new Dio();
   BannerListModel bannerData;
   ArticleBaseModel articleData;
@@ -57,10 +57,11 @@ class _IndexWidgetState extends BaseState<IndexWidget> {
             var data = articleData.data.datas[index];
             return Column(
               children: <Widget>[
+                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Text(data.author),
+                    Text("??: ${data.author}"),
                     Text(DateFormat("yyyy-MM-dd HH:mm:ss").format(DateTime.fromMillisecondsSinceEpoch(data.publishTime)))
                   ],),
                 Padding(
@@ -71,7 +72,7 @@ class _IndexWidgetState extends BaseState<IndexWidget> {
             );
           }, childCount: articleData.data.datas.length));
     } else {
-      return SliverToBoxAdapter(child: Container(child: Text('空空如也')));
+      return SliverToBoxAdapter(child: Container(child: Text('????')));
     }
   }
 
