@@ -58,34 +58,37 @@ class _IndexWidgetState extends BaseState<IndexWidget> {
           delegate:
               SliverChildBuilderDelegate((BuildContext context, int index) {
         var data = articleData.data.datas[index];
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.all(new Radius.circular(20.0)),
-            boxShadow: [BoxShadow(color: Color(0x99FFFF00), offset: Offset(5.0, 5.0),    blurRadius: 10.0, spreadRadius: 2.0), BoxShadow(color: Color(0x9900FF00), offset: Offset(1.0, 1.0)), BoxShadow(color: Color(0xFF0000FF))],
-          ),
-          margin: EdgeInsets.all(10),
-          child: Column(
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return GestureDetector(
+            onTap: () => {
+            },
+            child: Card(
+              color: Colors.white,
+              elevation: 4.0,
+              margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+              child: Column(
                 children: <Widget>[
-                  Text("作者: ${data.author}"),
-                  Text(DateFormat("yyyy-MM-dd HH:mm:ss").format(
-                      DateTime.fromMillisecondsSinceEpoch(data.publishTime)))
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Text("作者: ${data.author}"),
+                          Text(DateFormat("yyyy-MM-dd HH:mm:ss").format(
+                              DateTime.fromMillisecondsSinceEpoch(
+                                  data.publishTime)))
+                        ],
+                      )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      child: Text(data.title,
+                          style: TextStyle(fontStyle: FontStyle.italic)),
+                      alignment: Alignment.centerLeft,
+                    ),
+                  )
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  child: Text(data.title,
-                      style: TextStyle(fontStyle: FontStyle.italic)),
-                  alignment: Alignment.centerLeft,
-                ),
-              )
-            ],
-          ),
-        );
+            ));
       }, childCount: articleData.data.datas.length));
     } else {
       return SliverToBoxAdapter(child: Container(child: Text('????')));
